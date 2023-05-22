@@ -1,6 +1,9 @@
 import 'package:eos_chatting/config/palette.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import '../chatting/chat/message.dart';
+import '../chatting/chat/new_message.dart';
+
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
   @override
@@ -12,20 +15,29 @@ class _ChatScreenState extends State<ChatScreen> {
   }
   @override
   Widget build(BuildContext context) {
+    var _authentication = FirebaseAuth.instance;
     return Scaffold(
       backgroundColor: Palette.backgroundColor,
       appBar: AppBar(
         title: Text('Chat screen'),
-        backgroundColor: Palette.appBarColor,
+        backgroundColor: Palette.eosColor,
         leading: BackButton(
           color: Colors.white,
         ),
         actions: <Widget>[
-          new IconButton(onPressed: () => {},
-              icon: Icon(Icons.exit_to_app_outlined))
+          new IconButton(onPressed: () => { _authentication.signOut()},
+              icon: Icon(Icons.exit_to_app_rounded, color: Colors.white))
         ],
 
       ),
+        body: Container(
+            child: Column(
+              children: [
+                Expanded(child: Messages()),
+                NewMessage(),
+              ],
+            ))
+    /*
     body: StreamBuilder(
     stream: FirebaseFirestore.instance.collection('/chats/T3knu3z1KUeHs0Z4y3l6/message').snapshots(),
     builder: (BuildContext context,
@@ -50,6 +62,7 @@ class _ChatScreenState extends State<ChatScreen> {
     );
     },
     ),
+      */
     );
   }
 }
